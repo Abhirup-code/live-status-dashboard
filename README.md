@@ -49,7 +49,7 @@ npm run build
 - each component
 - the full app: loading, error, stale data, filtering, pause and resume
 
-<img width="1463" height="828" alt="Screenshot 2026-10-12 at 3 07 35 PM" src="https://github.com/user-attachments/assets/f9fe35ea-447e-4e02-abd0-b215de9f5fc0" />
+<img width="806" height="533" alt="Screenshot 2026-10-12 at 3 02 23 PM" src="https://github.com/user-attachments/assets/7e316c59-ee95-4e95-a980-ffecdba9d947" />
 
 
 ## Layout
