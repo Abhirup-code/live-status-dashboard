@@ -2,10 +2,12 @@
 
 [![CI](https://github.com/Abhirup-code/live-status-dashboard/actions/workflows/ci.yml/badge.svg)](https://github.com/Abhirup-code/live-status-dashboard/actions/workflows/ci.yml)
 
-A small React + TypeScript dashboard that shows URL health check results and refreshes every 5 seconds. It reads the same JSON report format that my [aws-healthcheck-iac](https://github.com/Abhirup-code/aws-healthcheck-iac) Lambda writes to S3.
+<img width="1463" height="828" alt="Screenshot 2026-10-12 at 3 07 35 PM" src="https://github.com/user-attachments/assets/32cc5b37-3a16-4cc0-824b-b76e8f3a73ab" />
 
-> **Honest scope.** All data in the demo is synthetic and made up. The dashboard has not been connected to a real AWS account. It was built with AI assistance, and I ran and reviewed the code. It is a learning project, not a production tool.
 
+ React + TypeScript dashboard that shows URL health check results and refreshes every 5 seconds. It reads the same JSON report format that my [aws-healthcheck-iac](https://github.com/Abhirup-code/aws-healthcheck-iac) Lambda writes to S3.
+
+> ** scope.** All data in the demo is synthetic and made up. The dashboard has not been connected to a real AWS account.
 ## What it does
 
 - Summary cards: checks, passing, failing, average latency.
@@ -47,6 +49,9 @@ npm run build
 - each component
 - the full app: loading, error, stale data, filtering, pause and resume
 
+<img width="1463" height="828" alt="Screenshot 2026-10-12 at 3 07 35 PM" src="https://github.com/user-attachments/assets/f9fe35ea-447e-4e02-abd0-b215de9f5fc0" />
+
+
 ## Layout
 
 ```
@@ -57,7 +62,6 @@ src/api.ts      fetch and validate a report
 vite.config.ts  mock API for dev and preview
 tests/          Jest + React Testing Library
 ```
-
 ## Report format
 
 ```json
