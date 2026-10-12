@@ -1,0 +1,52 @@
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --text: #1c2430;
+  --muted: #5b6676;
+  --border: #dde1e7;
+  --good: #1a7f4b;
+  --bad: #c0392b;
+  --accent: #2459d6;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #11151b;
+    --panel: #1a2029;
+    --text: #e6e9ee;
+    --muted: #9aa5b5;
+    --border: #2c3542;
+    --good: #4cc38a;
+    --bad: #ff7b6b;
+    --accent: #7aa2ff;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, sans-serif; }
+.app { max-width: 1000px; margin: 0 auto; padding: 24px 16px 48px; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+h1 { margin: 0; font-size: 1.5rem; }
+.muted { color: var(--muted); margin: 4px 0 0; }
+.actions, .filters { display: flex; gap: 8px; }
+button { background: var(--panel); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; cursor: pointer; font: inherit; }
+button:hover { border-color: var(--accent); }
+button[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+.banner { margin: 16px 0; padding: 10px 14px; border: 1px solid var(--bad); border-radius: 6px; color: var(--bad); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 20px 0; }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; }
+.card-label { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.card-value { font-size: 1.8rem; font-weight: 600; }
+.card-good .card-value { color: var(--good); }
+.card-bad .card-value { color: var(--bad); }
+.trends { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 20px; color: var(--accent); }
+.filters { margin: 8px 0 12px; }
+table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; }
+.mono { font-family: ui-monospace, monospace; font-size: 0.85rem; }
+.badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; border: 1px solid currentColor; }
+.badge-ok { color: var(--good); }
+.badge-fail { color: var(--bad); }
+@media (max-width: 640px) { .mono { word-break: break-all; } table { font-size: 0.85rem; } }
