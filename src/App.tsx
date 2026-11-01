@@ -6,6 +6,7 @@ import { ResultsTable } from "./components/ResultsTable";
 import { Sparkline } from "./components/Sparkline";
 import { SummaryCards } from "./components/SummaryCards";
 import { useReport } from "./hooks/useReport";
+import { downloadText, toCsv } from "./lib/csv";
 import { computeStats, filterResults, searchResults } from "./lib/stats";
 import type { Report, StatusFilter } from "./types";
 
@@ -103,6 +104,13 @@ export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetc
                 onChange={(e) => setQuery(e.target.value)}
               />
             </label>
+            <button
+              type="button"
+              disabled={visible.length === 0}
+              onClick={() => downloadText(toCsv(visible, checkHistory), "health-checks.csv")}
+            >
+              Download CSV
+            </button>
           </div>
           <ResultsTable results={visible} checkHistory={checkHistory} />
           <ChangeLog changes={changes} />

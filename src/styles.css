@@ -60,9 +60,10 @@ th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; }
 .changes li:last-child { border-bottom: 0; }
 .changes li.change-down { border-left-color: var(--bad); }
 .changes time { font-family: ui-monospace, monospace; font-size: 0.85rem; color: var(--muted); }
-.toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.toolbar { display: flex; justify-content: flex-start; align-items: center; gap: 12px; flex-wrap: wrap; }
 .search input { font: inherit; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--panel); color: var(--text); min-width: 220px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 th button.sort { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-transform: inherit; cursor: pointer; }
 button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
 @media (max-width: 640px) { .mono { word-break: break-all; } table { font-size: 0.85rem; } }
