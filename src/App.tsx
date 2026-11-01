@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchReport } from "./api";
 import { ChangeLog } from "./components/ChangeLog";
 import { FilterBar } from "./components/FilterBar";
@@ -14,6 +14,14 @@ interface Props {
   intervalMs?: number;
   /** Replace the network call, mainly for tests. */
   fetcher?: () => Promise<Report>;
+}
+
+const TITLE = "Health Check Dashboard";
+
+/** The tab title, so failures are visible from another tab. */
+export function pageTitle(failed: number, hasReport: boolean, hasError: boolean): string {
+  if (!hasReport) return hasError ? `Error · ${TITLE}` : TITLE;
+  return failed > 0 ? `(${failed} failing) ${TITLE}` : `All passing · ${TITLE}`;
 }
 
 export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetcher }: Props) {
@@ -34,11 +42,16 @@ export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetc
     [report, filter, query],
   );
 
+  useEffect(() => {
+    document.title = pageTitle(stats.failed, report !== null, error !== null);
+  }, [stats.failed, report, error]);
+  useEffect(() => () => void (document.title = TITLE), []);
+
   return (
     <main className="app">
       <header className="header">
         <div>
-          <h1>Health Check Dashboard</h1>
+          <h1>{TITLE}</h1>
           <p className="muted" data-testid="updated">
             {lastUpdated ? `Updated ${lastUpdated.toLocaleTimeString()}` : "Waiting for first report"}
             {paused ? " (paused)" : ` (every ${intervalMs / 1000}s)`}
