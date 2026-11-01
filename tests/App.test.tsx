@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../src/App";
 import { failing, makeReport, ok } from "./fixtures";
@@ -35,8 +35,9 @@ describe("App", () => {
     render(<App fetcher={() => Promise.resolve(report)} />);
     await screen.findByText("Alpha");
     await userEvent.click(screen.getByRole("button", { name: "Failing" }));
-    expect(screen.getByText("Beta")).toBeInTheDocument();
-    expect(screen.queryByText("Alpha")).not.toBeInTheDocument();
+    const table = screen.getByRole("table");
+    expect(within(table).getByText("Beta")).toBeInTheDocument();
+    expect(within(table).queryByText("Alpha")).not.toBeInTheDocument();
   });
 
   it("shows the empty message when the filter matches nothing", async () => {

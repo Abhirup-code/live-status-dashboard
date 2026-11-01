@@ -60,6 +60,6 @@ it("shows uptime and recent results in the table", async () => {
   render(<App fetcher={fetcher} />);
   expect(await screen.findByTestId("uptime-Alpha")).toHaveTextContent("100%");
   expect(screen.getByTestId("uptime-Beta")).toHaveTextContent("0%");
-  const row = screen.getByText("Beta").closest("tr")!;
+  const row = within(screen.getByRole("table")).getByText("Beta").closest("tr")!;
   expect(within(row).getByRole("img", { name: "Last 1 checks: 0 passed, 1 failed" })).toBeInTheDocument();
 });

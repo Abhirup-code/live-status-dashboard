@@ -25,3 +25,11 @@ export interface HistoryPoint {
 
 /** Recent pass (true) or fail (false) results for each check, oldest first. */
 export type CheckHistory = Record<string, boolean[]>;
+
+/** A check changing state: going down, or coming back up. */
+export interface StatusChange {
+  time: number;
+  name: string;
+  kind: "down" | "recovered";
+  detail: string | null;
+}

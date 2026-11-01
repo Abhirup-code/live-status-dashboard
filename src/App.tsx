@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { fetchReport } from "./api";
+import { ChangeLog } from "./components/ChangeLog";
 import { FilterBar } from "./components/FilterBar";
 import { ResultsTable } from "./components/ResultsTable";
 import { Sparkline } from "./components/Sparkline";
@@ -20,7 +21,7 @@ export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetc
   const [filter, setFilter] = useState<StatusFilter>("all");
 
   const load = useMemo(() => fetcher ?? (() => fetchReport(reportUrl)), [fetcher, reportUrl]);
-  const { report, error, loading, lastUpdated, history, checkHistory, refresh } = useReport({
+  const { report, error, loading, lastUpdated, history, checkHistory, changes, refresh } = useReport({
     fetcher: load,
     intervalMs,
     paused,
@@ -76,6 +77,7 @@ export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetc
           </section>
           <FilterBar value={filter} onChange={setFilter} />
           <ResultsTable results={visible} checkHistory={checkHistory} />
+          <ChangeLog changes={changes} />
         </>
       )}
     </main>
