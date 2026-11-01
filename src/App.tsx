@@ -15,6 +15,8 @@ interface Props {
   intervalMs?: number;
   /** Replace the network call, mainly for tests. */
   fetcher?: () => Promise<Report>;
+  /** Show a note that the data is synthetic, for the public demo. */
+  demo?: boolean;
 }
 
 const TITLE = "Health Check Dashboard";
@@ -25,7 +27,7 @@ export function pageTitle(failed: number, hasReport: boolean, hasError: boolean)
   return failed > 0 ? `(${failed} failing) ${TITLE}` : `All passing · ${TITLE}`;
 }
 
-export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetcher }: Props) {
+export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetcher, demo = false }: Props) {
   const [paused, setPaused] = useState(false);
   const [filter, setFilter] = useState<StatusFilter>("all");
   const [query, setQuery] = useState("");
@@ -67,6 +69,12 @@ export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetc
           </button>
         </div>
       </header>
+
+      {demo && (
+        <p className="demo-note" role="note">
+          Demo: every check here is synthetic data made in your browser. No real services are called.
+        </p>
+      )}
 
       {error && (
         <div role="alert" className="banner">

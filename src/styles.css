@@ -66,4 +66,5 @@ th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; }
 th button.sort { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-transform: inherit; cursor: pointer; }
 button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 button:disabled { opacity: 0.5; cursor: not-allowed; }
+.demo-note { margin: 16px 0 0; padding: 8px 12px; border: 1px dashed var(--accent); border-radius: 6px; color: var(--muted); }
 @media (max-width: 640px) { .mono { word-break: break-all; } table { font-size: 0.85rem; } }

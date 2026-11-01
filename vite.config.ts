@@ -25,5 +25,7 @@ function mockApi(): Plugin {
 }
 
 export default defineConfig({
+  // GitHub Pages serves the demo from /live-status-dashboard/, so the build sets BASE_PATH.
+  base: process.env.BASE_PATH ?? "/",
   plugins: [react(), mockApi()],
 });
