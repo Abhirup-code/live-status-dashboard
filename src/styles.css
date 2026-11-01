@@ -7,6 +7,7 @@
   --good: #1a7f4b;
   --bad: #c0392b;
   --accent: #2459d6;
+  --on-accent: #ffffff;
   color-scheme: light dark;
 }
 
@@ -20,6 +21,7 @@
     --good: #4cc38a;
     --bad: #ff7b6b;
     --accent: #7aa2ff;
+    --on-accent: #0b1220;
   }
 }
 
@@ -32,7 +34,7 @@ h1 { margin: 0; font-size: 1.5rem; }
 .actions, .filters { display: flex; gap: 8px; }
 button { background: var(--panel); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; cursor: pointer; font: inherit; }
 button:hover { border-color: var(--accent); }
-button[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .banner { margin: 16px 0; padding: 10px 14px; border: 1px solid var(--bad); border-radius: 6px; color: var(--bad); }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 20px 0; }
 .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; }
