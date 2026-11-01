@@ -6,7 +6,7 @@ import { ResultsTable } from "./components/ResultsTable";
 import { Sparkline } from "./components/Sparkline";
 import { SummaryCards } from "./components/SummaryCards";
 import { useReport } from "./hooks/useReport";
-import { computeStats, filterResults } from "./lib/stats";
+import { computeStats, filterResults, searchResults } from "./lib/stats";
 import type { Report, StatusFilter } from "./types";
 
 interface Props {
@@ -19,6 +19,7 @@ interface Props {
 export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetcher }: Props) {
   const [paused, setPaused] = useState(false);
   const [filter, setFilter] = useState<StatusFilter>("all");
+  const [query, setQuery] = useState("");
 
   const load = useMemo(() => fetcher ?? (() => fetchReport(reportUrl)), [fetcher, reportUrl]);
   const { report, error, loading, lastUpdated, history, checkHistory, changes, refresh } = useReport({
@@ -28,7 +29,10 @@ export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetc
   });
 
   const stats = useMemo(() => computeStats(report?.results ?? []), [report]);
-  const visible = useMemo(() => filterResults(report?.results ?? [], filter), [report, filter]);
+  const visible = useMemo(
+    () => searchResults(filterResults(report?.results ?? [], filter), query),
+    [report, filter, query],
+  );
 
   return (
     <main className="app">
@@ -75,7 +79,18 @@ export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetc
               />
             </div>
           </section>
-          <FilterBar value={filter} onChange={setFilter} />
+          <div className="toolbar">
+            <FilterBar value={filter} onChange={setFilter} />
+            <label className="search">
+              <span className="sr-only">Search checks</span>
+              <input
+                type="search"
+                placeholder="Search by name or URL"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </label>
+          </div>
           <ResultsTable results={visible} checkHistory={checkHistory} />
           <ChangeLog changes={changes} />
         </>

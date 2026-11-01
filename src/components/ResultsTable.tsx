@@ -1,4 +1,5 @@
-import { formatLatency, sortFailingFirst, uptime } from "../lib/stats";
+import { useState } from "react";
+import { formatLatency, type SortDirection, type SortKey, sortResults, uptime } from "../lib/stats";
 import type { CheckHistory, CheckResult } from "../types";
 import { StatusStrip } from "./StatusStrip";
 
@@ -11,27 +12,51 @@ function formatUptime(value: number | null): string {
   return value === null ? "—" : `${value}%`;
 }
 
+const COLUMNS: { label: string; key?: SortKey }[] = [
+  { label: "Status", key: "status" },
+  { label: "Name", key: "name" },
+  { label: "URL" },
+  { label: "HTTP" },
+  { label: "Latency", key: "latency" },
+  { label: "Uptime", key: "uptime" },
+  { label: "Recent" },
+  { label: "Detail" },
+];
+
 export function ResultsTable({ results, checkHistory = {} }: Props) {
+  const [sort, setSort] = useState<{ key: SortKey; direction: SortDirection }>({ key: "status", direction: "asc" });
+
   if (results.length === 0) {
     return <p className="muted">No checks match this filter.</p>;
   }
+
+  const sortBy = (key: SortKey) =>
+    setSort((s) => ({ key, direction: s.key === key && s.direction === "asc" ? "desc" : "asc" }));
+  const rows = sortResults(results, sort.key, sort.direction, (name) => uptime(checkHistory[name]));
 
   return (
     <table>
       <thead>
         <tr>
-          <th>Status</th>
-          <th>Name</th>
-          <th>URL</th>
-          <th>HTTP</th>
-          <th>Latency</th>
-          <th>Uptime</th>
-          <th>Recent</th>
-          <th>Detail</th>
+          {COLUMNS.map((c) =>
+            c.key ? (
+              <th
+                key={c.label}
+                aria-sort={sort.key === c.key ? (sort.direction === "asc" ? "ascending" : "descending") : "none"}
+              >
+                <button type="button" className="sort" onClick={() => sortBy(c.key!)}>
+                  {c.label}
+                  <span aria-hidden="true">{sort.key === c.key ? (sort.direction === "asc" ? " ▲" : " ▼") : ""}</span>
+                </button>
+              </th>
+            ) : (
+              <th key={c.label}>{c.label}</th>
+            ),
+          )}
         </tr>
       </thead>
       <tbody>
-        {sortFailingFirst(results).map((r) => (
+        {rows.map((r) => (
           <tr key={r.name} className={r.ok ? "row-ok" : "row-fail"}>
             <td>
               <span className={`badge ${r.ok ? "badge-ok" : "badge-fail"}`}>{r.ok ? "PASS" : "FAIL"}</span>

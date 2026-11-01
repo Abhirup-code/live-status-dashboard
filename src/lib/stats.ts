@@ -64,3 +64,42 @@ export function uptime(results: boolean[] | undefined): number | null {
   const passed = results.filter(Boolean).length;
   return Math.round((passed / results.length) * 1000) / 10;
 }
+
+/** Checks whose name or URL contains the query, ignoring case and surrounding spaces. */
+export function searchResults(results: CheckResult[], query: string): CheckResult[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return results;
+  return results.filter((r) => r.name.toLowerCase().includes(q) || r.url.toLowerCase().includes(q));
+}
+
+export type SortKey = "status" | "name" | "latency" | "uptime";
+export type SortDirection = "asc" | "desc";
+
+/**
+ * Sorts a copy of the results. "status" is failing first, then by name. Missing latency or uptime
+ * always goes last, whichever way the sort runs, and ties fall back to the name.
+ */
+export function sortResults(
+  results: CheckResult[],
+  key: SortKey,
+  direction: SortDirection,
+  uptimeOf: (name: string) => number | null = () => null,
+): CheckResult[] {
+  if (key === "status") {
+    const sorted = sortFailingFirst(results);
+    return direction === "asc" ? sorted : sorted.reverse();
+  }
+  const sign = direction === "asc" ? 1 : -1;
+  const value = (r: CheckResult): number | string | null =>
+    key === "name" ? r.name.toLowerCase() : key === "latency" ? r.latency_ms : uptimeOf(r.name);
+  return [...results].sort((a, b) => {
+    const va = value(a);
+    const vb = value(b);
+    if (va === null && vb === null) return a.name.localeCompare(b.name);
+    if (va === null) return 1;
+    if (vb === null) return -1;
+    if (va < vb) return -sign;
+    if (va > vb) return sign;
+    return a.name.localeCompare(b.name);
+  });
+}
