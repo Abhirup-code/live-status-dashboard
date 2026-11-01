@@ -69,3 +69,10 @@ describe("Sparkline", () => {
     expect(container.querySelector("polyline")?.getAttribute("points")).not.toMatch(/NaN/);
   });
 });
+
+it("puts the table in a labelled region that can scroll sideways on phones", () => {
+  render(<ResultsTable results={[ok("Alpha")]} />);
+  const region = screen.getByRole("region", { name: "Check results" });
+  expect(region).toHaveClass("table-wrap");
+  expect(region).toHaveAttribute("tabindex", "0"); // keyboard users can scroll it too
+});
