@@ -57,3 +57,10 @@ export function formatLatency(ms: number | null): string {
   if (ms >= 1000) return `${(ms / 1000).toFixed(1)} s`;
   return `${ms} ms`;
 }
+
+/** Percent of recent results that passed, one decimal place, or null with no results yet. */
+export function uptime(results: boolean[] | undefined): number | null {
+  if (!results || results.length === 0) return null;
+  const passed = results.filter(Boolean).length;
+  return Math.round((passed / results.length) * 1000) / 10;
+}

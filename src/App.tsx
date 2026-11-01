@@ -20,7 +20,7 @@ export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetc
   const [filter, setFilter] = useState<StatusFilter>("all");
 
   const load = useMemo(() => fetcher ?? (() => fetchReport(reportUrl)), [fetcher, reportUrl]);
-  const { report, error, loading, lastUpdated, history, refresh } = useReport({
+  const { report, error, loading, lastUpdated, history, checkHistory, refresh } = useReport({
     fetcher: load,
     intervalMs,
     paused,
@@ -75,7 +75,7 @@ export default function App({ reportUrl = "/api/report", intervalMs = 5000, fetc
             </div>
           </section>
           <FilterBar value={filter} onChange={setFilter} />
-          <ResultsTable results={visible} />
+          <ResultsTable results={visible} checkHistory={checkHistory} />
         </>
       )}
     </main>

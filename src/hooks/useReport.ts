@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { computeStats } from "../lib/stats";
-import type { HistoryPoint, Report } from "../types";
+import type { CheckHistory, HistoryPoint, Report } from "../types";
 
 interface Options {
   fetcher: () => Promise<Report>;
@@ -15,6 +15,8 @@ export interface ReportState {
   loading: boolean;
   lastUpdated: Date | null;
   history: HistoryPoint[];
+  /** The last historySize results for each check in the latest report. */
+  checkHistory: CheckHistory;
   refresh: () => void;
 }
 
@@ -25,6 +27,7 @@ export function useReport({ fetcher, intervalMs, paused, historySize = 20 }: Opt
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [history, setHistory] = useState<HistoryPoint[]>([]);
+  const [checkHistory, setCheckHistory] = useState<CheckHistory>({});
 
   const fetcherRef = useRef(fetcher);
   fetcherRef.current = fetcher;
@@ -42,6 +45,14 @@ export function useReport({ fetcher, intervalMs, paused, historySize = 20 }: Opt
       setHistory((prev) =>
         [...prev, { time: now.getTime(), passRate: stats.passRate, avgLatencyMs: stats.avgLatencyMs }].slice(-historySize),
       );
+      // Checks that are no longer in the report are dropped, so the history cannot grow without limit.
+      setCheckHistory((prev) => {
+        const nextHistory: CheckHistory = {};
+        for (const r of next.results) {
+          nextHistory[r.name] = [...(prev[r.name] ?? []), r.ok].slice(-historySize);
+        }
+        return nextHistory;
+      });
     } catch (err) {
       if (!mounted.current) return;
       setError(err instanceof Error ? err.message : "Unknown error");
@@ -68,5 +79,5 @@ export function useReport({ fetcher, intervalMs, paused, historySize = 20 }: Opt
     void load();
   }, [load]);
 
-  return { report, error, loading, lastUpdated, history, refresh };
+  return { report, error, loading, lastUpdated, history, checkHistory, refresh };
 }

@@ -22,3 +22,6 @@ export interface HistoryPoint {
   passRate: number;
   avgLatencyMs: number | null;
 }
+
+/** Recent pass (true) or fail (false) results for each check, oldest first. */
+export type CheckHistory = Record<string, boolean[]>;

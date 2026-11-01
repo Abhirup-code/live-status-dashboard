@@ -39,7 +39,7 @@ describe("ResultsTable", () => {
   it("shows the error text and a dash for a timeout", () => {
     render(<ResultsTable results={[timedOut("Slow")]} />);
     expect(screen.getByText("TimeoutError: timed out")).toBeInTheDocument();
-    expect(screen.getAllByText("—")).toHaveLength(2);
+    expect(screen.getAllByText("—")).toHaveLength(3); // HTTP, latency, and uptime with no history yet
   });
 });
 

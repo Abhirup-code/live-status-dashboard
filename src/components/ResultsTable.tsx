@@ -1,11 +1,17 @@
-import { formatLatency, sortFailingFirst } from "../lib/stats";
-import type { CheckResult } from "../types";
+import { formatLatency, sortFailingFirst, uptime } from "../lib/stats";
+import type { CheckHistory, CheckResult } from "../types";
+import { StatusStrip } from "./StatusStrip";
 
 interface Props {
   results: CheckResult[];
+  checkHistory?: CheckHistory;
 }
 
-export function ResultsTable({ results }: Props) {
+function formatUptime(value: number | null): string {
+  return value === null ? "—" : `${value}%`;
+}
+
+export function ResultsTable({ results, checkHistory = {} }: Props) {
   if (results.length === 0) {
     return <p className="muted">No checks match this filter.</p>;
   }
@@ -19,6 +25,8 @@ export function ResultsTable({ results }: Props) {
           <th>URL</th>
           <th>HTTP</th>
           <th>Latency</th>
+          <th>Uptime</th>
+          <th>Recent</th>
           <th>Detail</th>
         </tr>
       </thead>
@@ -32,6 +40,10 @@ export function ResultsTable({ results }: Props) {
             <td className="mono">{r.url}</td>
             <td>{r.status_code ?? "—"}</td>
             <td>{formatLatency(r.latency_ms)}</td>
+            <td data-testid={`uptime-${r.name}`}>{formatUptime(uptime(checkHistory[r.name]))}</td>
+            <td>
+              <StatusStrip results={checkHistory[r.name] ?? []} />
+            </td>
             <td>{r.error ?? ""}</td>
           </tr>
         ))}

@@ -49,4 +49,8 @@ th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; }
 .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; border: 1px solid currentColor; }
 .badge-ok { color: var(--good); }
 .badge-fail { color: var(--bad); }
+.strip { display: inline-flex; gap: 2px; align-items: flex-end; }
+.strip span { display: inline-block; width: 4px; height: 14px; border-radius: 1px; }
+.strip-ok { background: var(--good); }
+.strip-fail { background: var(--bad); height: 18px !important; }
 @media (max-width: 640px) { .mono { word-break: break-all; } table { font-size: 0.85rem; } }
